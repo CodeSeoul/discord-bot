@@ -3,6 +3,7 @@ import discord
 import logging
 
 from discord import app_commands
+from google.cloud import translate_v2 as translate
 
 
 MY_GUILD = discord.Object(id=0)  # replace with your guild id
@@ -17,10 +18,11 @@ class CodeSeoulBotClient(discord.Client):
     def __init__(self, *, intents: discord.Intents):
         super().__init__(intents=intents)
         self.target_languages = {
-            "english",
-            "korean",
+            "english": "en",
+            "korean": "ko",
         }
         self.done_emoji: discord.PartialEmoji = discord.PartialEmoji(name="✅")
+        self.translate_client = translate.Client()
 
     async def retrieve_message(
         self, channel_id: int, message_id: int
@@ -30,18 +32,13 @@ class CodeSeoulBotClient(discord.Client):
         return await message.fetch()
 
     async def translate(self, message: str, target_language: str):
-        return f"[{target_language}] {message}"
+        translation_response = self.translate_client.translate(
+            message, target_language=target_language
+        )
+        return translation_response["translatedText"]
 
     async def on_ready(self):
         logger.info(f"We have logged in as {self.user}")
-
-    async def on_message(self, message):
-        logger.debug("caught message: %s", message)
-        if message.author == self.user:
-            return
-
-        if message.content.startswith("$hello"):
-            await message.channel.send("Hello!")
 
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         logger.debug("caught raw reaction: %s", payload)
@@ -69,7 +66,7 @@ class CodeSeoulBotClient(discord.Client):
 
             # Translate the message text
             translated_message = await self.translate(
-                message.content, payload.emoji.name
+                message.content, self.target_languages[payload.emoji.name]
             )
 
             # Send the translated message and mark the original message as done
