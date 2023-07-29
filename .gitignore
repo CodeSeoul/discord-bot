@@ -1,0 +1,5 @@
+.venv
+venv
+codeseoul_discord_bot.egg-info
+.env
+__pycache__

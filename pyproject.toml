@@ -1,0 +1,37 @@
+[project]
+name = "codeseoul-discord-bot"
+version = "0.0.1"
+description = "CodeSeoul's Discord bot, currently featuring translation"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT License" }
+authors = [
+    { name = "Bryan \"Beege\" Berry", email = "beege@codeseoul.org" }
+]
+maintainers = [
+    { name = "Bryan \"Beege\" Berry", email = "beege@codeseoul.org" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python"
+]
+dependencies = [
+    "discord.py >=2.3.1,<3.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest >=7.4.0,<8.0.0",
+    "pytest-cov[all]",
+    "pre-commit"
+]
+test = [
+    "pytest >=7.4.0,<8.0.0",
+    "pytest-cov[all]"
+]
+
+[project.urls]
+repository = "https://github.com/CodeSeoul/discord-bot"
+
+[project.scripts]
+bot = "codeseoul_discord_bot:main.main"
