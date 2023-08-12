@@ -2,11 +2,7 @@ from os import getenv
 import discord
 import logging
 
-from discord import app_commands
 from google.cloud import translate_v2 as translate
-
-
-MY_GUILD = discord.Object(id=0)  # replace with your guild id
 
 
 logger = logging.getLogger("discord.codeseoul")
